@@ -42,7 +42,7 @@ public class SecurityConfig {
         return source;
     }
 
-    // SecurityFilterChain 설정 - 들어오는 요청은 이 필터를 거칠 것
+    // SecurityFilterChain 설정 - 들어오는 요청은 이 필터를 거칠 것임
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults());    //위에서 만든 CORS 설정을 security 에 적용
