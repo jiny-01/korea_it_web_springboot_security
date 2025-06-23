@@ -52,11 +52,29 @@ public class SecurityConfig {
         //사용자가 의도하지 않은 요청을 공격자가 유도해서 서버에 전달하도록 하는 공격
         //JWT 방식 또는 무상태(Stateless) 인증이기 떄문에
         //세션이 없고, 쿠키도 안 쓰고, 토큰 기반이기 때문에 CSRF 공격 자체가 성립되지 않음
-        //꺼둔다 => 세션 안 쓰겠다고 선언하는 부분
+
+
+        //서버 사이드 렌더링 로그인 방식 비활성화
+        http.formLogin(formLogin -> formLogin.disable());
+        //HTTP 프로토콜 기본 로그인 방식 비활성화
+        http.httpBasic(httpBasic -> httpBasic.disable());
+        //서버 사이드 렌더링 로그아웃 비활성화
+        http.logout(logout -> logout.disable());
+
+        // session creation 꺼둔다 => 세션 안 쓰겠다고 선언하는 부분
         http.sessionManagement
                 (Session -> Session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        //특정 요청 URL에 대한 권한 설정
+        http.authorizeHttpRequests(auth -> {
+//            auth.requestMatchers("/post").permitAll();
+            auth.anyRequest().authenticated();
+        });
+
+
         return http.build();
     }
+
 
 
 
