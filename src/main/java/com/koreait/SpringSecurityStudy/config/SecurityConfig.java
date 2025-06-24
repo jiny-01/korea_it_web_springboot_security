@@ -1,17 +1,23 @@
 package com.koreait.SpringSecurityStudy.config;
 
+import com.koreait.SpringSecurityStudy.security.filter.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration   //설정파일에 달아야하는 어노테이션
 public class SecurityConfig {
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;   //만든 필터 가져옴
 
     //
     /*
@@ -65,9 +71,11 @@ public class SecurityConfig {
         http.sessionManagement
                 (Session -> Session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        //특정 요청 URL에 대한 권한 설정
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        //username~~ (작동 안함-formlogin 에서 비활성화) 필터로 가기 전에 jwt필터를 끼운 것
+        //특정 요청 URL에 대한 권한 설정 - (로그인, 회원가입은 막으면 안됨)
         http.authorizeHttpRequests(auth -> {
-//            auth.requestMatchers("/post").permitAll();
+            auth.requestMatchers("/auth/test").permitAll();   //허가할 요청 URL
             auth.anyRequest().authenticated();
         });
 
