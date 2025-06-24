@@ -2,8 +2,7 @@ package com.koreait.SpringSecurityStudy.security.jwt;
 
 //JWT 관련 기능 구현 - JWT 필터에서 가져다씀
 
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,4 +31,41 @@ public class JwtUtil {
                 .signWith(KEY)  //토큰에 서명을 적용
                 .compact();  // 설정한 JWT 내용을 바탕으로 최종적으로 문자열 형태의 JWT 생성
     }
+
+
+    //토큰의 형식이 맞는지 확인하는 메소드
+    public boolean isBearer(String token) {
+        if (token == null) {
+            return false;
+        }
+        if (!token.startsWith("Bearer ")) {   //토큰이 Bearer 로 시작안할 경우
+            return false;
+        }
+        return true;    //유효한 토큰임
+    }
+
+
+    public String removeBearer(String bearerToken) {
+        return bearerToken.replaceFirst("Bearer ", "");     //여러 개 중 가장 첫 번째 것만 가져옴
+
+    }
+
+
+    /*
+    * Claims 만 뽑는 메소드
+    *Claims : JWT 의 Payload 영역 -> 사용자 정보, 만료일자 등 담겨있음
+    * JwtException : 토큰 잘못 되었을 경우 (위변조, 만료 등) 발생하는 예외
+    * */
+    public Claims getClaims(String token) throws JwtException {
+        JwtParserBuilder jwtParserBuilder = Jwts.parser();
+        //Jwts.parser() 는 JwtParserBuilder 객체를 반환 - 정보를 가져오는 기능
+        //JWT 파서를 구성할 수 있는 빌더 (parser 설정 작업을 체이닝으로 가능하게 함)
+        jwtParserBuilder.setSigningKey(KEY);
+        //generateToken 시 KEY 를 그대로 넣음 - 토큰의 서명을 검증하기 위해 비밀키 설정
+        JwtParser jwtParser = jwtParserBuilder.build();
+        //설정이 완료된 파서를 빌드해서 최종 JWTparser 객체 생성
+        return jwtParser.parseClaimsJws(token).getBody();   //순수 Claims JWT 를 파싱
+    }
+
+
 }

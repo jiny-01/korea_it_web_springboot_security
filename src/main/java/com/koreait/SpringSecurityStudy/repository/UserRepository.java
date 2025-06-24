@@ -6,6 +6,8 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @Data
 public class UserRepository {
@@ -17,5 +19,10 @@ public class UserRepository {
     public int addUser(User user) {
         return userMapper.addUser(user);
 
+    }
+
+    //유저 아이디 일치 확인
+    public Optional<User> getUserByUserId(Integer userId) {
+        return userMapper.getUserByUserId(userId);
     }
 }
