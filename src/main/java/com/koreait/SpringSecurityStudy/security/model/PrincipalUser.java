@@ -1,5 +1,6 @@
 package com.koreait.SpringSecurityStudy.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import java.util.List;
 public class PrincipalUser implements UserDetails {
     private Integer userId;
     private String username;
+    @JsonIgnore     //패스워드는 프론트에 띄우면 안됨 => JsonIgnore
     private String password;
     private String email;
 

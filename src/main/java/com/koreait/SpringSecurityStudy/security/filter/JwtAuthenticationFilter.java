@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter implements Filter {
                 String id = claims.getId();      //아이디를 Claims 에서 빼옴
 
                 //여기서부터 UserDetailsService 역할 시작
-                Integer userId = Integer.parseInt(id);       //String id 를 int userId로 변환
+                Integer userId = Integer.parseInt(id);       //String id 를 int userId 로 변환
                 Optional<User> optionalUser = userRepository.getUserByUserId(userId);
                 optionalUser.ifPresentOrElse((user) -> {
                     //DB 에서 조회된 User 객체를 Spring Security 인증 객체 (PrincipalUser)로

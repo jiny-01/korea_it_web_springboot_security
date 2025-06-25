@@ -4,6 +4,7 @@ import com.koreait.SpringSecurityStudy.entity.User;
 import com.koreait.SpringSecurityStudy.mapper.UserMapper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -16,9 +17,13 @@ public class UserRepository {
     private UserMapper userMapper;
 
     //회원가입 - 사용자 추가
-    public int addUser(User user) {
-        return userMapper.addUser(user);
-
+    public Optional<User> addUser(User user) {   //원래 user -> username, pw, email 만 있음
+        try {
+            userMapper.addUser(user);           //xml에서 generatekeys 옵션해줬으므로 바로 set -> userId넣어서 리턴해줌
+        } catch (DuplicateKeyException e) {    //유저 아이디 중복
+            return Optional.empty();           //없음 - 빈 껍데기 줌
+        }
+        return Optional.of(user);
     }
 
     //유저 아이디 일치 확인
