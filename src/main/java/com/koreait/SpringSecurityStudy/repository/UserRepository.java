@@ -19,7 +19,7 @@ public class UserRepository {
     //회원가입 - 사용자 추가
     public Optional<User> addUser(User user) {   //원래 user -> username, pw, email 만 있음
         try {
-            userMapper.addUser(user);           //xml에서 generatekeys 옵션해줬으므로 바로 set -> userId넣어서 리턴해줌
+            userMapper.addUser(user);           //xml에서 generatekeys 옵션해줬으므로 바로 set -> userId 넣어서 리턴해줌
         } catch (DuplicateKeyException e) {    //유저 아이디 중복
             return Optional.empty();           //없음 - 빈 껍데기 줌
         }

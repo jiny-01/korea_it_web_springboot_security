@@ -6,6 +6,7 @@ import com.koreait.SpringSecurityStudy.dto.SignupReqDto;
 import com.koreait.SpringSecurityStudy.entity.User;
 import com.koreait.SpringSecurityStudy.entity.UserRole;
 import com.koreait.SpringSecurityStudy.repository.UserRepository;
+import com.koreait.SpringSecurityStudy.repository.UserRoleRepository;
 import com.koreait.SpringSecurityStudy.security.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,17 +26,21 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+
     public ApiRespDto<?> addUser(SignupReqDto signupReqDto) {
         Optional<User> optionalUser = userRepository.addUser(signupReqDto.toEntity(bCryptPasswordEncoder));
         UserRole userRole = UserRole.builder()
                 .userId(optionalUser.get().getUserId())
                 .roleId(3)     //일단 임시사용자("3") 으로 설정
                 .build();
+        userRoleRepository.addUserRole(userRole);
 
         //암호화해서 repo의 adduser 에 넘김
         //새로 생성된 계정에 해당하는 권한(Userrole)도 넣어줘야함
 
-        return new ApiRespDto<>("success", "회원가입 성공", result);
+        return new ApiRespDto<>("success", "회원가입 성공", optionalUser);
         //존재하는 username 인지 검증
         //이메일 중복확인 (DB에 이미 있는지)
 
