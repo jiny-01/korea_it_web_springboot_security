@@ -32,11 +32,7 @@ public class PrincipalUser implements UserDetails {
                 .collect(Collectors.toList());
     }
         //Granted~ 를 상속받은 ? 어떤 Collection
-//        return List.of();
-//        return userRoles.stream().map(
-//                userRole -> new SimpleGrantedAuthority
-//                        (userRole.getRole().getRoleName())).collect(Collectors.toList());
-//        ;
-        //컬렉션 안에 있는 요소마다 어떤 것을 적용하는 것
+//
+        //.map : 컬렉션 안에 있는 요소마다 어떤 것을 적용하는 것
     }
 
