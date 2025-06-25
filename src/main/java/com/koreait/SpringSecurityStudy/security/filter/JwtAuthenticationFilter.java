@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;   //캐스팅
         //request 안에 메소드가 있을 것
         List<String> methods = List.of("POST", "PUT", "GET", "PATCH", "DELETE");
-       //해당 메소드가 아니면 그냥 다음 필터로 넘김
+        //해당 메소드가 아니면 그냥 다음 필터로 넘김
         if (!methods.contains(request.getMethod())) {
             filterChain.doFilter(servletRequest, servletResponse);    //filterChain.doFilter 다음 필터로 넘김
             return;
@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter implements Filter {
                 String id = claims.getId();      //아이디를 Claims 에서 빼옴
 
                 //여기서부터 UserDetailsService 역할 시작
-                Integer userId = Integer.parseInt(id);       //String id 를 int userId 로 변환
+                Integer userId = Integer.parseInt(id);       //String id 를 int userId로 변환
                 Optional<User> optionalUser = userRepository.getUserByUserId(userId);
                 optionalUser.ifPresentOrElse((user) -> {
                     //DB 에서 조회된 User 객체를 Spring Security 인증 객체 (PrincipalUser)로
@@ -73,16 +73,14 @@ public class JwtAuthenticationFilter implements Filter {
                     throw new AuthenticationServiceException("인증 실패 : 사용자 없음");
                 });
 
-            }catch (RuntimeException e) {
+            } catch (RuntimeException e) {
                 e.printStackTrace();
-            }
-
             }
 
         }
 
-        System.out.println("전처리완료");
 
+        System.out.println("전처리완료");
         filterChain.doFilter(servletRequest, servletResponse);
         //filterChain.dofilter 기준 -> 전에 있으면 전처리 / 후에 있으면 후처리
         //request : 요청 보낸값, response 전처리 완료된 요청(다음 필터로 갈 요청)

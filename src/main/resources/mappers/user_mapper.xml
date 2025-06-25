@@ -16,6 +16,14 @@
         where
         user_id = #{userId}
     </select>
+    <select id="getUserByUsername">
+        select
+            *
+        from
+            user_tb
+        where
+            username = #{username}
+    </select>
 
 
 

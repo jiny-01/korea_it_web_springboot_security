@@ -1,5 +1,6 @@
 package com.koreait.SpringSecurityStudy.controller;
 
+import com.koreait.SpringSecurityStudy.dto.SigninReqDto;
 import com.koreait.SpringSecurityStudy.dto.SignupReqDto;
 import com.koreait.SpringSecurityStudy.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,10 @@ public class AuthController {
 
 
     //로그인
-
+    @PostMapping("/signin")
+    public ResponseEntity<?> signin(@RequestBody SigninReqDto signinReqDto) {
+        return ResponseEntity.ok(authService.signin(signinReqDto));
+    }
 
 
 

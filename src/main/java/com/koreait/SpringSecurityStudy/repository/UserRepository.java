@@ -25,4 +25,11 @@ public class UserRepository {
     public Optional<User> getUserByUserId(Integer userId) {
         return userMapper.getUserByUserId(userId);
     }
+
+    //유저 네임 있는지 확인
+    public Optional<User> getUserByUsername(String username) {
+        return userMapper.getUserByUsername(username);
+    }
+
+
 }

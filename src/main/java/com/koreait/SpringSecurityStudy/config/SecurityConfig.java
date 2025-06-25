@@ -34,16 +34,11 @@ public class SecurityConfig {
     * */
 
 
-
-
     /*
     * corsConfigurationSource() 설정은 spring security 에서
     * CORS (Cross-Origin Resource Sharing)를 처리하기 위한 설정
     * CORS - 브라우저가 보안상 다른 도메인의 리소스 요청을 제한하는 정책 => 보안정책
     * 기본적으로 브라우저는 같은 출처(Same-Origin) 만 허용 (포트 다르면 다른 출처)
-    *
-    *
-    *
     * */
 
     //CORS 설정
@@ -88,14 +83,13 @@ public class SecurityConfig {
                 (Session -> Session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        //username~~ (작동 안함-formlogin 에서 비활성화) 필터로 가기 전에 jwt필터를 끼운 것
+        //username~~ (작동 안함- formlogin 에서 비활성화) 필터로 가기 전에 jwt필터를 끼운 것
 
-        //특정 요청 URL에 대한 권한 설정 - (로그인, 회원가입은 막으면 안됨)
+        //특정 요청 URL 에 대한 권한 설정 - (로그인, 회원가입은 막으면 안됨)
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/auth/test", "/auth/signup").permitAll();   //허가할 요청 URL
+            auth.requestMatchers("/auth/test", "/auth/signup", "/auth/signin").permitAll();   //허가할 요청 URL
             auth.anyRequest().authenticated();
         });
-
 
 
 
