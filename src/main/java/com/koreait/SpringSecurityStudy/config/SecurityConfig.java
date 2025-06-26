@@ -92,8 +92,12 @@ public class SecurityConfig {
 
         //특정 요청 URL 에 대한 권한 설정 - (로그인, 회원가입은 막으면 안됨)
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/auth/test", "/auth/signup", "/auth/signin").permitAll();   //인증없이 접근허용할 요청 URL
+            auth.requestMatchers("/auth/test").hasRole("ADMIN"); //test 요청 보내려면 ADMIN 권한을 가진 사람만
+            //권한을 ROLE_ADMIN ROLE_USER 처럼 ROLE_ 형식으로 저장했다면 -> hasRole("ADMIN')
+            //권한을 그냥 ADMIN, USER 이렇게 저장했다면 -> hasAuthority("ADMIN") 을 사용
+            auth.requestMatchers( "/auth/signup", "/auth/signin").permitAll();   //인증없이 접근허용할 요청 URL
             auth.anyRequest().authenticated();  //	그 외 모든 URL- 인증 필요(토큰 필요)
+            //principal 해당함 - Bearer 토큰 있어야함
         });
 
 
