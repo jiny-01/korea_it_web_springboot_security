@@ -14,13 +14,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@Configuration   //설정파일에 달아야하는 어노테이션
+@Configuration   //Spring 설정 클래스임을 나타냄 → 빈으로 등록되어 동작
 public class SecurityConfig {
 
-    @Autowired
+    @Autowired         //의존성 주입 - JWT 필터
     private JwtAuthenticationFilter jwtAuthenticationFilter;   //만든 필터 가져옴
 
-    //비밀번호 암호화 - BC 인코더
+    //비밀번호 암호화용 Bean 생성 - BC 인코더
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -38,6 +38,7 @@ public class SecurityConfig {
     * corsConfigurationSource() 설정은 spring security 에서
     * CORS (Cross-Origin Resource Sharing)를 처리하기 위한 설정
     * CORS - 브라우저가 보안상 다른 도메인의 리소스 요청을 제한하는 정책 => 보안정책
+    * 다른 도메인에서 백엔드 API를 호출할 때 보안 제약에 걸리는 것을 방지하는 설정.
     * 기본적으로 브라우저는 같은 출처(Same-Origin) 만 허용 (포트 다르면 다른 출처)
     * */
 
@@ -51,7 +52,7 @@ public class SecurityConfig {
         //2) 요청을 보내는 쪽에서 Request, Response Header 정보에 대한 제약을 허용
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
         //3) 요청을 보내는 쪽의 메소드 (GET, POST, PUT, DELETE, OPTION 등)
-        corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
+        corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);  //모든 HTTP메서드 허용
 
         // 요청 URL (/user/get)에 대한 CORS 설정 적용을 위해 객체 생성
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -60,35 +61,39 @@ public class SecurityConfig {
         return source;
     }
 
-    // SecurityFilterChain 설정 - 들어오는 요청은 이 필터를 거칠 것임
+    // SecurityFilterChain 설정 커스터마이징- 들어오는 요청은 이 필터를 거칠 것임
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults());    //위에서 만든 CORS 설정을 security 에 적용
-        http.csrf(csrf -> csrf.disable());
+        http.csrf(csrf -> csrf.disable());  //CSRF 보호 비활성화 (JWT는 필요 없음)
         //CSRF 란
         //사용자가 의도하지 않은 요청을 공격자가 유도해서 서버에 전달하도록 하는 공격
         //JWT 방식 또는 무상태(Stateless) 인증이기 떄문에
         //세션이 없고, 쿠키도 안 쓰고, 토큰 기반이기 때문에 CSRF 공격 자체가 성립되지 않음
 
 
-        //서버 사이드 렌더링 로그인 방식 비활성화
+        //-----CORS, CSRF, 로그인, 세션 설정---------
+        //서버 사이드 렌더링 로그인 방식 비활성화 - 기본 로그인 페이지 비활성화
         http.formLogin(formLogin -> formLogin.disable());
-        //HTTP 프로토콜 기본 로그인 방식 비활성화
+        //HTTP 프로토콜 기본 로그인 방식 비활성화 - 브라우저 팝업 로그인 비활성화
         http.httpBasic(httpBasic -> httpBasic.disable());
-        //서버 사이드 렌더링 로그아웃 비활성화
+        //서버 사이드 렌더링 로그아웃 비활성화 - 로그아웃 기능 비활성화
         http.logout(logout -> logout.disable());
 
-        // session creation 꺼둔다 => 세션 안 쓰겠다고 선언하는 부분
+        // session creation 꺼둔다 => 세션 저장 안 함 (JWT는 Stateless 인증 방식)
         http.sessionManagement
                 (Session -> Session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        //UsernamePasswordAuthenticationFilter 보다 먼저 우리가 만든 JwtAuthenticationFilter를 실행
         //username~~ (작동 안함- formlogin 에서 비활성화) 필터로 가기 전에 jwt필터를 끼운 것
+
 
         //특정 요청 URL 에 대한 권한 설정 - (로그인, 회원가입은 막으면 안됨)
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/auth/test", "/auth/signup", "/auth/signin").permitAll();   //허가할 요청 URL
-            auth.anyRequest().authenticated();
+            auth.requestMatchers("/auth/test", "/auth/signup", "/auth/signin").permitAll();   //인증없이 접근허용할 요청 URL
+            auth.anyRequest().authenticated();  //	그 외 모든 URL- 인증 필요(토큰 필요)
         });
 
 
