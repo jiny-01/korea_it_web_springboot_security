@@ -95,6 +95,7 @@
         where
             user_id = #{userId};
     </update>
+
     <select id="getUserByEmail" resultMap="UserResultMap">
         select
             ut.user_id,

@@ -107,7 +107,8 @@ public class SecurityConfig {
                     "/auth/signup",
                     "/auth/signin",
                     "/oauth2/**",
-                    "/login/oauth2/**").permitAll();   //인증없이 접근허용할 요청 URL
+                    "/login/oauth2/**"
+                    ).permitAll();   //인증없이 접근허용할 요청 URL
             auth.anyRequest().authenticated();  //	그 외 모든 URL- 인증 필요(토큰 필요)
             //principal 해당함 - Bearer 토큰 있어야함
         });

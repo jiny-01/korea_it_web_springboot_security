@@ -20,4 +20,10 @@ public class OAuth2Controller {
     public ResponseEntity<?> signup(@RequestBody OAuth2SignupReqDto oAuth2SignupReqDto) {
         return ResponseEntity.ok(oAuth2AuthService.signup(oAuth2SignupReqDto));
     }
+
+    //DB 에 추가할 때
+    //user_tb -> user_role tb -> oauth2_user_tb 로 들어감
+    //이때 3개 다하려면 transaction 걸어줌
+
+
 }
