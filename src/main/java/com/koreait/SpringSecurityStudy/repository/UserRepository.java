@@ -36,6 +36,11 @@ public class UserRepository {
         return userMapper.getUserByUsername(username);
     }
 
+    //유저 이메일 있는지 확인
+    public Optional<User> getUserByEmail(String email) {
+        return userMapper.getUserByEmail(email);
+    }
+
     //유저 이메일 수정
     public int updateEmail(User user) {
         return userMapper.updateEmail(user);

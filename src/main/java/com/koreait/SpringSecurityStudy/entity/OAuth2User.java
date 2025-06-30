@@ -19,6 +19,4 @@ public class OAuth2User {
     private LocalDateTime updateDt;
 
 
-
-
 }

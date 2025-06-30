@@ -2,10 +2,9 @@ package com.koreait.SpringSecurityStudy.security.Handler;
 
 import com.koreait.SpringSecurityStudy.entity.OAuth2User;
 import com.koreait.SpringSecurityStudy.entity.User;
-import com.koreait.SpringSecurityStudy.repository.OAuth2UserRepositoy;
+import com.koreait.SpringSecurityStudy.repository.OAuth2UserRepository;
 import com.koreait.SpringSecurityStudy.repository.UserRepository;
 import com.koreait.SpringSecurityStudy.security.jwt.JwtUtil;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +23,7 @@ import java.util.Optional;
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
-    private OAuth2UserRepositoy oAuth2UserRepositoy;
+    private OAuth2UserRepository oAuth2UserRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -35,6 +34,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         //OAuth2User 정보 가져오기
+        //IOE Exception : 입출력 처리 중 발생하는 예외
 
         DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
         //OAuth2User 가 context holder 안에 들어가는 인증객체가 될 것 -> getPrincipal 로 받아옴
@@ -45,7 +45,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         //provider, providerUserId 이미 연동된 사용자 정보가 있는지 DB 조회
         //OAuthUser - Entity 거 가져오기
-        OAuth2User oAuth2User = oAuth2UserRepositoy.getOAuth2UserByProviderAndProviderUserId(provider, providerUserId);
+        OAuth2User oAuth2User = oAuth2UserRepository.getOAuth2UserByProviderAndProviderUserId(provider, providerUserId);
 
         //OAuth2 로그인을 통해 회원가입이 되어있지 않거나 아직 연동되지 않은 상태
         if(oAuth2User == null) {

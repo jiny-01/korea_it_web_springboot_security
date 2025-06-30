@@ -95,6 +95,29 @@
         where
             user_id = #{userId};
     </update>
+    <select id="getUserByEmail" resultMap="UserResultMap">
+        select
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.email,
+
+            urt.user_role_id,
+            urt.user_id As urt_user_id,
+            urt.role_id As urt_role_id,
+            urt.create_dt,
+            urt.update_dt,
+
+            rt.role_id,
+            rt.role_name,
+            rt.role_name_kor
+        from
+            user_tb ut
+            left outer join user_role_tb urt on (urt.user_id = ut.user_id)     -- left outer join : 기준이 되는 user 의 칼럼은 그대로 둠
+            left outer join role_tb rt on (rt.role_id = urt.role_id)
+        where
+            ut.email = #{email};
+    </select>
 
 
 
