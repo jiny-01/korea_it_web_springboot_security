@@ -50,13 +50,13 @@ public class AuthService {
         //회원정보 있는지 확인
         Optional<User> optionalUser = userRepository.getUserByUsername(signinReqDto.getUsername());
         if (optionalUser.isEmpty()) {
-            return new ApiRespDto<>("failed", "사용자정보를 확인해주세요", null);
+            return new ApiRespDto<>("failed", "사용자 정보를 확인해주세요", null);
             //"아이디가 잘못됨" 등 맞다 틀리다 알려주면 안됨 - 보안상 문제
         }
         User user = optionalUser.get();
         //DB 에 있는 거랑 입력한 게 일치하는지
         if (!bCryptPasswordEncoder.matches(signinReqDto.getPassword(), user.getPassword())) {
-            return new ApiRespDto<>("failed", "사용자정보를 확인해주세요", null);
+            return new ApiRespDto<>("failed", "사용자 정보를 확인해주세요", null);
         }
         //Dto - 사용자 입력  / user.get DB 에 저장된 암호문일 것
         System.out.println("로그인 성공");
@@ -84,13 +84,15 @@ public class AuthService {
             return new ApiRespDto<>("failed", "새 비밀번호가 일치하지 않습니다.", null);
         }
         //ContextHolder 안에 principaluser 객체가 있을 것 - 원래 비밀번호
-        //원래 비밀번호가 맞는지 확인 (modifypass dto 에 입력한 것과 같은지)
+        //원래 비밀번호가 맞는지 확인 (modifypw dto 에 입력한 것과 같은지)
 
         String password = bCryptPasswordEncoder.encode(modifyPasswordReqDto.getNewPassword());
         int result = userRepository.updatePassword(principalUser.getUserId(), password);
         return new ApiRespDto<>("success", "비밀번호 수정 성공", result);
 
     }
+
+    //비밀번호 찾기?
 }
 
 
