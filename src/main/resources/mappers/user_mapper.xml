@@ -51,7 +51,7 @@
         rt.role_name_kor
     from
         user_tb ut
-        left outer join user_role_tb urt on (urt.user_id = ut.user_id)     -- left outer join : 기준이 되는 user 의 칼럼은 그대로 둠
+        left outer join user_role_tb urt on (urt.user_id = ut.user_id)
         left outer join role_tb rt on (rt.role_id = urt.role_id)
     where
         ut.user_id = #{userId};

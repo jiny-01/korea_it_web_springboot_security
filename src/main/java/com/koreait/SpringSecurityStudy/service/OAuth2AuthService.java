@@ -1,6 +1,7 @@
 package com.koreait.SpringSecurityStudy.service;
 
 import com.koreait.SpringSecurityStudy.dto.ApiRespDto;
+import com.koreait.SpringSecurityStudy.dto.OAuth2MergeReqDto;
 import com.koreait.SpringSecurityStudy.dto.OAuth2SignupReqDto;
 import com.koreait.SpringSecurityStudy.entity.User;
 import com.koreait.SpringSecurityStudy.entity.UserRole;
@@ -49,9 +50,26 @@ public class OAuth2AuthService {
         return new ApiRespDto<>("success", "OAuth2 회원가입 완료", null);
 
 
+    }
+    //연동 메소드 - 기존 회원과 oauth 로그인 회원 연동
 
+    public ApiRespDto<?> merge(OAuth2MergeReqDto oAuth2MergeReqDto) {
+        Optional<User> optionalUser = userRepository.getUserByUsername(oAuth2MergeReqDto.getUsername());
 
+        if (optionalUser.isEmpty()) {
+            return new ApiRespDto<>("failed", "사용자 없음 - 사용자 정보를 확인하세요", null);
+        }
 
+        if (!bCryptPasswordEncoder.matches(oAuth2MergeReqDto.getPassword(), optionalUser.get().getPassword())) {
+            return new ApiRespDto<>("failed", "비밀번호 불일치 - 사용자 정보를 확인하세요", null);
+        }
 
+        oAuth2UserRepository.insertOAuth2User(
+                oAuth2MergeReqDto.toOAuth2User(optionalUser.get().getUserId())
+        );
+
+        return new ApiRespDto<>("success", "연동 완료", null);
     }
 }
+
+

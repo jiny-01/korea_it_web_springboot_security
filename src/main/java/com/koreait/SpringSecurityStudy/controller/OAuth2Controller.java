@@ -1,5 +1,6 @@
 package com.koreait.SpringSecurityStudy.controller;
 
+import com.koreait.SpringSecurityStudy.dto.OAuth2MergeReqDto;
 import com.koreait.SpringSecurityStudy.dto.OAuth2SignupReqDto;
 import com.koreait.SpringSecurityStudy.service.OAuth2AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class OAuth2Controller {
     //DB 에 추가할 때
     //user_tb -> user_role tb -> oauth2_user_tb 로 들어감
     //이때 3개 다하려면 transaction 걸어줌
+
+    @PostMapping("/merge")
+    public ResponseEntity<?> merge(@RequestBody OAuth2MergeReqDto oAuth2MergeReqDto) {
+        return ResponseEntity.ok(oAuth2AuthService.merge(oAuth2MergeReqDto));
+    }
 
 
 }
