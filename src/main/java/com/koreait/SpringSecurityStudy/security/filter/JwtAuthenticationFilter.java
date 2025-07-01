@@ -105,7 +105,7 @@ public class JwtAuthenticationFilter implements Filter {    //Filter 인터페�
         }
 
 
-        System.out.println("전처리완료");   //전처리 => 인증 작업은 filterChain.doFilter() 이전
+        System.out.println("전처리완료");   //전처리 => g인증 작업은 filterChain.doFilter() 이전
         filterChain.doFilter(servletRequest, servletResponse);
         //filterChain.dofilter 기준 -> 전에 있으면 전처리 / 후에 있으면 후처리
         //필터 체인 계속 실행 -인증이든 실패든 항상 실행
