@@ -44,6 +44,7 @@ public class SecurityConfig {
 
     /*
     * corsConfigurationSource() 설정은 spring security 에서
+    *
     * CORS (Cross-Origin Resource Sharing)를 처리하기 위한 설정
     * CORS - 브라우저가 보안상 다른 도메인의 리소스 요청을 제한하는 정책 => 보안정책
     * 다른 도메인에서 백엔드 API를 호출할 때 보안 제약에 걸리는 것을 방지하는 설정.
