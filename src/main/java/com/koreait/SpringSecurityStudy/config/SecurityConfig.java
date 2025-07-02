@@ -26,7 +26,7 @@ public class SecurityConfig {
     private OAuth2PrincipalUserService oAuth2PrincipalUserService;
 
     @Autowired
-    private OAuth2SuccessHandler oAuth2ScuccessHandler;
+    private OAuth2SuccessHandler oAuth2SucccessHandler;
 
     //비밀번호 암호화용 Bean 생성 - BC 인코더
     @Bean
@@ -107,7 +107,8 @@ public class SecurityConfig {
                     "/auth/signup",
                     "/auth/signin",
                     "/oauth2/**",
-                    "/login/oauth2/**"
+                    "/login/oauth2/**",
+                    "/mail/verify"
                     ).permitAll();   //인증없이 접근허용할 요청 URL
             auth.anyRequest().authenticated();  //	그 외 모든 URL- 인증 필요(토큰 필요)
             //principal 해당함 - Bearer 토큰 있어야함
@@ -122,7 +123,7 @@ public class SecurityConfig {
                 //Oauth2 인증이 최종적으로 성공한 후 (사용자 정보 파싱 완료 후) 실행할 핸들러 설정
                         userInfo.userService(oAuth2PrincipalUserService))
                 //OAuth2 로그인 요청이 성공하고 사용자 정보를 가져오는 과정 설정
-                .successHandler(oAuth2ScuccessHandler)
+                .successHandler(oAuth2SucccessHandler)
         );
 
 
