@@ -45,11 +45,11 @@ public class JwtAuthenticationFilter implements Filter {    //Filter 인터페�
 
         // "Authorization" 헤더에서 "Bearer " 접두사 확인 후, 순수 토큰만 추출하는 로직
         String authorization = request.getHeader("Authorization");
-        System.out.println("Bearer 토큰 : " + authorization);
+        System.out.println("Bearer 토큰 : " + authorization);     //Bearer abweftwgg 이런 형식으로 옴
         if (jwtUtil.isBearer(authorization)) {
-            String accessToken = jwtUtil.removeBearer(authorization);   //Bearer 접두사 제거하고 토큰만 남김
+            String accessToken = jwtUtil.removeBearer(authorization);   //Bearer접두사 제거하고 토큰만 남김
 
-            //Claims 추출 및 검증
+            //Claimms 추출 및 검증
             try {
                 Claims claims = jwtUtil.getClaims(accessToken);
                 //토큰에서 Claims 를 추출 - 이때 서명검증 + 만료 시간 확인도 같이 진행
@@ -60,8 +60,8 @@ public class JwtAuthenticationFilter implements Filter {    //Filter 인터페�
                 /*
                 * 여기서부터 UserDetailsService 역할 시작
                 *사용자 DB 조회 및 인증 객체 생성
-                *토큰에서 꺼낸 id를 이용해 DB 에서 사용자 조회
-                *사용자 있으면 → PrincipalUser 로 인증 객체 생성
+                *토큰에서 꺼낸 id를 이용해 DB에서 사용자 조회
+                *사용자 있으면 → PrincipalUser로 인증 객체 생성
                 *없으면 → 인증 실패 예외 발생
                 *
                 *
@@ -101,17 +101,13 @@ public class JwtAuthenticationFilter implements Filter {    //Filter 인터페�
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
-//            System.out.println("Bearer 토큰: ")
-
-//            System.out.println(accessToken);
 
         }
 
 
         System.out.println("전처리완료");   //전처리 => 인증 작업은 filterChain.doFilter() 이전
-
         filterChain.doFilter(servletRequest, servletResponse);
-        //filterChain.doFilter 기준 -> 전에 있으면 전처리 / 후에 있으면 후처리
+        //filterChain.dofilter 기준 -> 전에 있으면 전처리 / 후에 있으면 후처리
         //필터 체인 계속 실행 -인증이든 실패든 항상 실행
         //인증에 성공하면 이후 컨트롤러에서 @AuthenticationPrincipal, SecurityContextHolder 사용 가능
         //request : 요청 보낸값, response 전처리 완료된 요청(다음 필터로 갈 요청)
