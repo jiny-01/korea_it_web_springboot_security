@@ -19,4 +19,6 @@ public class UserRole {
     private LocalDateTime updateDt;
 
     private Role role;    //Role 객체를 가짐
+
+
 }

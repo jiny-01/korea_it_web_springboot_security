@@ -39,6 +39,9 @@ public class MailService {
         //사용자는 jwt 토큰을 가진 상태 - principaluser 존재한다는 의미
 
         //입력한 이메일 주소와 principaluser 에 등록된 email 일치하는지
+        System.out.println("Principal User Email: " + principalUser.getEmail());
+        System.out.println("Requested Email: " + sendMailReqDto.getEmail());
+
         if(!principalUser.getEmail().equals(sendMailReqDto.getEmail())) {
             return new ApiRespDto<>("failed", "이메일 불일치 - 잘못된 접근", null);
         }

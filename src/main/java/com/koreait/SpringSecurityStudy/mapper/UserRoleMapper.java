@@ -18,4 +18,5 @@ public interface UserRoleMapper {
     int updateRoleId(Integer userId, Integer userRoleId);
 
 
+    Optional<UserRole> getUserRoleByUserId(Integer userId);
 }

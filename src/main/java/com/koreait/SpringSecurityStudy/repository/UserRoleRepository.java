@@ -18,6 +18,8 @@ public class UserRoleRepository {
                 ? Optional.empty() : Optional.of(userRole);   //0 이 아니면 userRole
     }
 
+
+
     public Optional<UserRole> getUserRoleByUserIdAndRoleId(Integer userId, Integer roleId) {
         return userRoleMapper.getUserRoleByUserIdAndRoleId(userId, roleId);
     }
